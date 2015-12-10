@@ -1,0 +1,29 @@
+# depslib dependency file v1.0
+1336315230 source:h:\efrei\l1\semestre_2\tai\algèbre linéaire\programme_pagerank\pagerank\main.cpp
+	<iostream>
+	<stdio.h>
+	<stdlib.h>
+	<time.h>
+	"matrice.h"
+	"conio.h"
+
+1336517658 h:\efrei\l1\semestre_2\tai\algèbre linéaire\programme_pagerank\pagerank\matrice.h
+
+1321095612 h:\efrei\l1\semestre_2\tai\algèbre linéaire\programme_pagerank\pagerank\conio.h
+	<stdio.h>
+
+1336315198 source:h:\efrei\l1\semestre_2\tai\algèbre linéaire\programme_pagerank\pagerank\matrice.cpp
+	<iostream>
+	<stdio.h>
+	<stdlib.h>
+	"matrice.h"
+	"conio.h"
+
+1321095596 source:h:\efrei\l1\semestre_2\tai\algèbre linéaire\programme_pagerank\pagerank\conio.c
+	<stdio.h>
+	<stdlib.h>
+	<unistd.h>
+	<windows.h>
+	<string.h>
+	"conio.h"
+

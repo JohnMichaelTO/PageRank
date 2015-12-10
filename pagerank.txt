@@ -1,0 +1,239 @@
+#include <iostream>
+#include <stdio.h>
+#include <stdlib.h>
+#include "matrice.h"
+#include "conio.h"
+#define SYMB 42 // Symbole utilisé pour les listes
+
+void pagerank()
+{
+    printf("\n   %c PageRank %c\n\n\n", SYMB, SYMB);
+
+    // Variables./    // double matrice[TAILLE_MATRICE][TAILLE_MATRICE] = {{0}./};
+    double PR[TAILLE_MATRICE] = {0};
+
+    double matrice[TAILLE_MATRICE][TAILLE_MATRICE] = {{0, 1./2., 1./2., 1./2., 1./2., 0, 1./2., 0, 0, 0, 0, 0, 0, 0},
+                                                    {1./5., 0, 0, 0, 1./2., 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                                                    {1./5., 1./2., 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                                                    {1./5., 0, 1./2., 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                                                    {1./5., 0, 0, 1./2., 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                                                    {1./5., 0, 0, 0, 0, 0, 0, 1, 0, 1./5., 0, 0, 0, 0},
+                                                    {0, 0, 0, 0, 0, 1./3., 0, 0, 0, 0, 0, 0, 0, 0},
+                                                    {0, 0, 0, 0, 0, 1./3., 1./2., 0, 1./2., 0, 0, 0, 0, 0},
+                                                    {0, 0, 0, 0, 0, 1./3., 0, 0, 0, 0, 0, 0, 0, 0},
+                                                    {0, 0, 0, 0, 0, 0, 0, 0, 1./2., 0, 1./2., 1./2., 1./2., 1./2.},
+                                                    {0, 0, 0, 0, 0, 0, 0, 0, 0, 1./5., 0, 0, 0, 1./2.},
+                                                    {0, 0, 0, 0, 0, 0, 0, 0, 0, 1./5., 1./2., 0, 0, 0},
+                                                    {0, 0, 0, 0, 0, 0, 0, 0, 0, 1./5., 0, 1./2., 0, 0},
+                                                    {0, 0, 0, 0, 0, 0, 0, 0, 0, 1./5., 0, 0, 1./2., 0}};
+    // afficheMatrice(matrice, PR);
+    //initMatrice(matrice);
+    // afficheMatrice(matrice, PR);
+    //genererMatrice(matrice);
+    afficheMatrice(matrice, PR);
+    genererPR(matrice, PR);
+    afficheMatrice(matrice, PR);
+
+}
+
+void initMatrice(double matrice[TAILLE_MATRICE][TAILLE_MATRICE])
+{
+    int i, j, k, K;
+
+    for(i = 0; i < TAILLE_MATRICE; i++)
+    {
+        k = rand() % (TAILLE_MATRICE / 2) + 1;
+
+        K = k;
+        for(j = 0; j < K; j++)
+        {
+            if(i == j)
+            {
+                K = K + 1;
+                matrice[j][i] = 0.0;
+            }
+            else
+            {
+                matrice[j][i] = 1.0 / k;
+            }
+        }
+    }
+}
+
+void genererMatrice(double matrice[TAILLE_MATRICE][TAILLE_MATRICE])
+{
+    int n = TAILLE_MATRICE, temp, i, j;
+
+    for(i = 0; i < TAILLE_MATRICE; i++)
+    {
+        for(j = 0; j < TAILLE_MATRICE; j++)
+        {
+            for(n = j - 1; n > 0; n--)
+            {
+                temp = rand() % n;
+
+                if(n != i && temp != i)
+                {
+                    swap(&matrice[n][i], &matrice[temp][i]);
+                }
+            }
+        }
+    }
+}
+/*
+double genPR(double matrice[TAILLE_MATRICE][TAILLE_MATRICE], double PR[TAILLE_MATRICE], int j)
+{
+    int i;
+
+    for(i = 0; i < TAILLE_MATRICE; i++)
+    {
+        PR[i] = PR[j] * matrice[i][j];
+    }
+}*/
+
+void genererPR(double matrice[TAILLE_MATRICE][TAILLE_MATRICE], double PR[TAILLE_MATRICE])
+{
+    int i, j, k, t, cpt = 0;
+    double PR2[TAILLE_MATRICE][TAILLE_MATRICE];
+
+    j = rand() % TAILLE_MATRICE;
+    // j = 7;
+    printf("\n\nj = %i\n\n", j + 1);
+
+    for(i = 0; i < TAILLE_MATRICE; i++)
+    {
+        PR[i] = matrice[i][j];
+        printf("  %g", PR[i]);
+    }
+    printf("\n\n");
+
+    for(t = 0; t < 100; t++)
+    {
+        cpt = 0;
+        for(i = 0; i < TAILLE_MATRICE; i++)
+        {
+            if(PR[i] != 0.0)
+            {
+                j = i;
+                for(k = 0; k < TAILLE_MATRICE; k++)
+                {
+                    PR2[cpt][k] = matrice[k][j] * PR[j];
+                    printf("  %g", PR2[cpt][k]);
+                }
+                cpt++;
+                printf("\ncpt = %i", cpt);
+                printf("\n\n");
+            }
+        }
+        printf("\n\n-----Test -----------\n\n");
+        for(i = 1; i < cpt; i++)
+        {
+            for(j = 0; j < TAILLE_MATRICE; j++)
+            {
+                PR2[0][j] = PR2[0][j] + PR2[i][j];
+            }
+        }
+        for(i = 0; i < TAILLE_MATRICE; i++)
+        {
+            printf("  %g", PR2[0][i]);
+        }
+        printf("\n\n----------------\n\n");
+        for(i = 0; i < TAILLE_MATRICE; i++)
+        {
+            PR[i] = PR2[0][i];
+        }
+        printf("\n\n");
+    }
+}
+
+void afficheMatrice(double matrice[TAILLE_MATRICE][TAILLE_MATRICE], double PR[TAILLE_MATRICE])
+{
+    int i, j;
+
+    printf("\n\nMatrice :\n\n   ");
+
+    for(i = 0; i < TAILLE_MATRICE; i++)
+    {
+        // if(i % 2 == 1)
+        // {
+            printf("  %2.i", i + 1);
+        /*}
+        else
+        {
+            printf("  ");
+        }*/
+    }
+    printf("\n");
+    for(i = 0; i < TAILLE_MATRICE; i++)
+    {
+        //printf("\t");
+        printf("%2.i  ", i + 1);
+        for(j = 0; j < TAILLE_MATRICE; j++)
+        {
+            if(i % 2 == 1)
+            {
+                textbackground(DARKGRAY);
+            }
+            else
+            {
+                textbackground(LIGHTGRAY);
+            }
+
+            textcolor(BLACK);
+
+            if(j % 2 == 1)
+            {
+                textcolor(BLUE);
+            }
+
+            if(i == j)
+            {
+                textcolor(LIGHTRED);
+            }
+
+            if(matrice[i][j] != 0.0 && matrice[i][j] != 1.0)
+            {
+                printf("1/%g ", 1.0 / matrice[i][j]);
+            }
+            else if(matrice[i][j] == 1.0)
+            {
+                printf("  1 ");
+            }
+            else
+            {
+                printf("  0 ");
+            }
+            textbackground(BLACK);
+            textcolor(WHITE);
+        }
+        printf("  %g", PR[i]);
+        printf("\n");
+    }
+}
+
+void swap(double *x, double *y)
+{
+    double temp;
+    temp = *x;
+    *x = *y;
+    *y = temp;
+}
+
+void verifierWolfram(double matrice[TAILLE_MATRICE][TAILLE_MATRICE])
+{
+    int i, j;
+    int taille = TAILLE_MATRICE;
+    printf("Verifier sur wolfram alpha :\n\n");
+
+    printf(" {{");
+    for(i = 0; i < taille; i++)
+    {
+        for(j = 0; j < taille; j++)
+        {
+            printf("%g", matrice[i][j]);
+            printf(", ");
+        }
+        printf("}, {");
+    }
+    printf("}}\n\n\n");
+}
